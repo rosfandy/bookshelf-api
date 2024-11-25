@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const bookSchema = Joi.object({
-    name: Joi.string().min(3).required().messages({
+    name: Joi.string().required().messages({
         'string.empty': 'Gagal menambahkan buku. Mohon isi nama buku',
         'any.required': 'Gagal menambahkan buku. Mohon isi nama buku',
     }),

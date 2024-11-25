@@ -9,7 +9,7 @@ export function getBook(request, h) {
 
     try {
         if (bookId) {
-            const book = localStorage.find(book => book.id === bookId);
+            let book = localStorage.find(book => book.id === bookId);
 
             if (!book) {
                 return h.response({
@@ -25,7 +25,7 @@ export function getBook(request, h) {
         }
 
         let filteredBooks = localStorage;
-
+        console.log(filteredBooks)
         if (name) {
             const searchName = name.replace(/['"]+/g, '').toLowerCase();
             filteredBooks = name
@@ -40,6 +40,11 @@ export function getBook(request, h) {
         filteredBooks = finished !== undefined
             ? filteredBooks.filter(book => book.finished === (finished === '1'))
             : filteredBooks;
+
+        filteredBooks = filteredBooks.map(book => {
+            const { id, name, publisher } = book;
+            return { id, name, publisher };
+        });
 
         return h.response({
             status: 'success',
@@ -67,7 +72,6 @@ export function createBook(request, h) {
 
     try {
         const newBookId = nanoid();
-        const finished = pageCount === readPage;
 
         const newBook = {
             id: newBookId,
@@ -78,7 +82,7 @@ export function createBook(request, h) {
             publisher,
             pageCount,
             readPage,
-            finished,
+            finished: pageCount === readPage ? true : false,
             reading,
             insertedAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
@@ -123,7 +127,7 @@ export function updateBook(request, h) {
             publisher,
             pageCount,
             readPage,
-            finished,
+            finished: pageCount === readPage ? true : false,
             reading,
             updatedAt: new Date().toISOString()
         };

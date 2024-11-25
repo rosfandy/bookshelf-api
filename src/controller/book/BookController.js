@@ -62,7 +62,7 @@ export function getBook(request, h) {
 
 export function createBook(request, h) {
     const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
-    const { error } = bookSchema.validate(request.payload);
+    const { error } = bookSchema('POST').validate(request.payload);
 
     if (error)
         return h.response({
@@ -109,6 +109,14 @@ export function createBook(request, h) {
 export function updateBook(request, h) {
     const { bookId } = request.params;
     const { name, year, author, summary, publisher, pageCount, readPage, finished, reading } = request.payload;
+
+    const { error } = bookSchema('PUT').validate(request.payload);
+
+    if (error)
+        return h.response({
+            status: 'fail',
+            message: error.details[0].message,
+        }).code(400);
 
     try {
         const bookIndex = localStorage.findIndex(book => book.id === bookId);

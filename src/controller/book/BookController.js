@@ -61,7 +61,7 @@ export function createBook(request, h) {
 
     if (error)
         return h.response({
-            status: 'failed',
+            status: 'fail',
             message: error.details[0].message
         }).code(400);
 
@@ -96,7 +96,7 @@ export function createBook(request, h) {
 
     } catch (error) {
         return h.response({
-            status: 'failed',
+            status: 'fail',
             message: 'Internal Server Error'
         }).code(500);
     }
